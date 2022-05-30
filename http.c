@@ -99,7 +99,17 @@ int main(int argc, char *argv[])
 
 write_again:
 	ret = write(tcp_fd, p, len);
-	if (ret < 0) {
+	if (ret <= 0) {
+
+		if (ret == 0) {
+			/*
+			 * oggghh...
+			 */
+			puts("server down while we're sending data");
+			close(tcp_fd);
+			return ENETDOWN;
+		}
+
 		err = errno;
 
 		/*
